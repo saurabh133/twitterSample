@@ -90,13 +90,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3F586DA823006E89000DF528 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		3FC39E4622F9E35600874BEB = {
 			isa = PBXGroup;
 			children = (
@@ -118,7 +111,6 @@
 		3FC39E5122F9E35600874BEB /* TwitterAssignment */ = {
 			isa = PBXGroup;
 			children = (
-				3F586DA823006E89000DF528 /* New Group */,
 				3FC39E5222F9E35600874BEB /* AppDelegate.swift */,
 				3FE61B7B22FEB0460075050D /* Utilities.swift */,
 				3FB69CCF22FBD0E400966FBD /* StringConstatnt.swift */,
