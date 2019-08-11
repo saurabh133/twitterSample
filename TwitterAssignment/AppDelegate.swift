@@ -19,10 +19,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-       
         
-            MagicalRecord.setupCoreDataStack()
+             MagicalRecord.setupCoreDataStack()
         TWTRTwitter.sharedInstance().start(withConsumerKey:"Sh4JYw4aQ773emLJTL9zlFFF2", consumerSecret:"KYZk6x2O0HO8e1ClUyqDDMjXOnYJhjwHBXrY4PJ6M7OFBxkE7z")
+        
         
         
         self.window = UIWindow(frame: UIScreen.main.bounds)

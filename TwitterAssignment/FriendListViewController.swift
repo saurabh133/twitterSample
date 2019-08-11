@@ -16,6 +16,7 @@ class FriendListViewController: UIViewController,UITableViewDataSource,UITableVi
     var screenName:String?
     var accessToken:String?
     var pagingValue:String = "-1"
+    var preValue:String = "-1"
     var followersTotalCount:Int = 0
     var pageValueCount =  20
 
@@ -59,7 +60,7 @@ class FriendListViewController: UIViewController,UITableViewDataSource,UITableVi
          self.fetchIsInprogress = true
          
          userDetailsDict.setValue(pagingValue.description, forKey: "cursor")
-        // userDetailsDict.setValue(pageValueCount, forKey: "count")
+         userDetailsDict.setValue(pageValueCount, forKey: "count")
          userDetailsDict.setValue(self.screenName, forKey: "screen_name")
          userDetailsDict.setValue(skipStatus, forKey: "skip_status")
          userDetailsDict.setValue(includeUserEntities, forKey: "include_user_entities")
@@ -74,7 +75,6 @@ class FriendListViewController: UIViewController,UITableViewDataSource,UITableVi
         }
         
         Utilities.startActivityIndicator(activity: self.activityIndicator)
-        self.view.isUserInteractionEnabled = false
         
         ConnectionManager.callGetMethodWith(url: friendlistURL, appenDict: userDetailsDict) { (data, response, error) in
          
@@ -92,6 +92,12 @@ class FriendListViewController: UIViewController,UITableViewDataSource,UITableVi
                 {
                     self.pagingValue = json.value(forKey: "next_cursor_str") as! String
                 }
+                
+                if (json.value(forKey: "previous_cursor_str") != nil)
+                {
+                    self.preValue = json.value(forKey: "previous_cursor_str") as! String
+                }
+                
                 
                 if self.isForFollowers
                     {
@@ -129,7 +135,7 @@ class FriendListViewController: UIViewController,UITableViewDataSource,UITableVi
         }
         
         Utilities.stopActivityIndicator(activity: self.activityIndicator)
-        self.view.isUserInteractionEnabled = true
+    
        
         DispatchQueue.main.async {
             self.tableview.reloadData()
@@ -156,14 +162,17 @@ class FriendListViewController: UIViewController,UITableViewDataSource,UITableVi
         
          cell.selectionStyle = .none
         
-        if self.isForFollowers{
-            
-            cell.updatedCellFollwerDetails(orderObj: ((listBindingArray[indexPath.row] as? Follower)!))
-            
-        }else{
-            cell.updatedCellFollowingDetails(orderObj: (listBindingArray[indexPath.row] as? Following)!)
+        if listBindingArray.count > 0
+        {
+            if self.isForFollowers{
+                
+                cell.updatedCellFollwerDetails(orderObj: ((listBindingArray[indexPath.row] as? Follower)!))
+                
+            }else{
+                cell.updatedCellFollowingDetails(orderObj: (listBindingArray[indexPath.row] as? Following)!)
+            }
         }
-        
+         
         cell.layoutSubviews()
         
        return cell
@@ -177,12 +186,17 @@ class FriendListViewController: UIViewController,UITableViewDataSource,UITableVi
   
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
    
-        if listBindingArray.count < followersTotalCount && !fetchIsInprogress && pagingValue != "0"
+        if listBindingArray.count < followersTotalCount && !fetchIsInprogress
         {
-            if (((tableview.contentOffset.y + tableview.frame.size.height) > tableview.contentSize.height )){
+            let translation = scrollView.panGestureRecognizer.translation(in: scrollView.superview!)
+            
+            if (((tableview.contentOffset.y + tableview.frame.size.height) > tableview.contentSize.height )) && pagingValue != "0"{
                 
                 self.getFollowers()
                 
+            }else if translation.y > 0  && preValue != "0"{
+                self.pagingValue = self.preValue
+                 self.getFollowers()
             }
         
         }

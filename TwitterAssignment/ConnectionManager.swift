@@ -55,7 +55,8 @@ class ConnectionManager: NSObject {
        
         var appendString = ""
         
-        if appendString == GET_FOLLOWERS_LIST{
+        if url == GET_FOLLOWERS_LIST || url == GET_FRIENDS_LIST{
+            
             appendString = self.getLoginParams(dict: appenDict)
         }else{
             appendString = self.getUserDetailsParams(dict: appenDict)
@@ -97,14 +98,14 @@ class ConnectionManager: NSObject {
    
     class func getLoginParams(dict: NSDictionary) ->String {
         
+        let count : Int  = dict.object(forKey: "count") as! Int
         let cursor : String = dict.object(forKey: "cursor") as! String
         let screenName : String = dict.object(forKey: "screen_name") as! String
         let skipStatus : String = dict.object(forKey: "skip_status") as! String
         let includeUserEntities : String = dict.object(forKey: "include_user_entities") as! String
         
         
-        let stringToSend = "cursor" + "=" + cursor + "&" +
-            "screen_name" + "=" + screenName + "&" +
+        let stringToSend = "count" + "=" + count.description + "&" + "cursor" + "=" + cursor + "&" + "screen_name" + "=" + screenName + "&" +
             "skip_status" + "=" + skipStatus + "&" +
                 "include_user_entities" + "=" + includeUserEntities
         
