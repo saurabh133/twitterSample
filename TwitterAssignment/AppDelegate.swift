@@ -8,16 +8,35 @@
 
 import UIKit
 import CoreData
+import TwitterKit
+import TwitterCore
+import MagicalRecord
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+       
+        
+            MagicalRecord.setupCoreDataStack()
+        TWTRTwitter.sharedInstance().start(withConsumerKey:"Sh4JYw4aQ773emLJTL9zlFFF2", consumerSecret:"KYZk6x2O0HO8e1ClUyqDDMjXOnYJhjwHBXrY4PJ6M7OFBxkE7z")
+        
+        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let initialViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+        let initialViewControllerNav = UINavigationController(rootViewController: initialViewController)
+        
+        self.window?.rootViewController = initialViewControllerNav
+        self.window?.makeKeyAndVisible()
+        
         return true
+   
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -44,6 +63,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.saveContext()
     }
 
+    
+    // MARK:- Twitter Login Methods
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+        var valueTwitter: Bool = true
+        
+        valueTwitter =  TWTRTwitter.sharedInstance().application(app, open: url, options: options)
+        
+        return valueTwitter
+    }
+    
+    func application(_ application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplication.ExtensionPointIdentifier) -> Bool {
+        if (extensionPointIdentifier == UIApplication.ExtensionPointIdentifier.keyboard) {
+            return false
+        }
+        return true
+    }
+    
+    func application(_ application: UIApplication,
+                     open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        var handle: Bool = true
+        
+        let options: [String: AnyObject] = [UIApplication.OpenURLOptionsKey.sourceApplication.rawValue: sourceApplication as AnyObject, UIApplication.OpenURLOptionsKey.annotation.rawValue: annotation as AnyObject]
+        
+        handle = TWTRTwitter.sharedInstance().application(application, open: url, options: options)
+       
+        return handle
+    }
+    
+
+    
+    
+    
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {

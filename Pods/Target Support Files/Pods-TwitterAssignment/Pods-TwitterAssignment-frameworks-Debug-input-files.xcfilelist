@@ -1,0 +1,6 @@
+${PODS_ROOT}/Target Support Files/Pods-TwitterAssignment/Pods-TwitterAssignment-frameworks.sh
+${BUILT_PRODUCTS_DIR}/MagicalRecord/MagicalRecord.framework
+${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework
+${BUILT_PRODUCTS_DIR}/STTwitter/STTwitter.framework
+${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework
+${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework
